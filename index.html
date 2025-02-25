@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI COMMUNICATION</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: aqua;
+        }
+        #signImage {
+            margin-top: 20px;
+            max-width: 200px;
+            max-height: 200px;
+        }
+        #textArea {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 18px;
+            color: rebeccapurple
+        }
+        #voiceBtn, #signBtn {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #e93636;
+
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AI Communication</h1>
+
+    <button id="voiceBtn">Start Voice Recognition</button>
+    <button id="signBtn">Convert Text to Sign</button>
+
+    <div id="textArea" contenteditable="true" placeholder="Type or Speak to Communicate..."></div>
+
+    <img id="signImage" src="" alt="Sign Language" style="display:none">
+
+    <script>
+        // Voice Recognition using Web Speech API
+        const voiceBtn = document.getElementById('voiceBtn');
+        const textArea = document.getElementById('textArea');
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        voiceBtn.addEventListener('click', () => {
+            recognition.start();
+        });
+
+        recognition.addEventListener('result', (event) => {
+            const transcript = event.results[0][0].transcript;
+            textArea.innerText = transcript;
+        });
+
+        recognition.addEventListener('end', () => {
+            console.log('Voice recognition ended.');
+        });
+
+        // Text to Sign Language: Displaying Images for Basic Words
+        const signBtn = document.getElementById('signBtn');
+        const signImage = document.getElementById('signImage');
+
+        const signImages = {
+            "hello": "hello.png.png",  // Replace with actual sign images
+            "thank": "thank.png",
+            "allu arjun":"bunny.png",
+            "save": "save.png"
+                };
+
+        signBtn.addEventListener('click', () => {
+            const text = textArea.innerText.toLowerCase().trim();
+            if (signImages[text]) {
+                signImage.src = signImages[text];
+                signImage.style.display = "block";
+            } else {
+                alert("Sign language not available for this word.");
+                signImage.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+</html>
